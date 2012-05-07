@@ -702,6 +702,73 @@ public class JmxUtils {
 		return sb.toString();
 	}
 
+	public static String getKeyStringTSD(Query query, Result result, Entry<String, Object> values, List<String> typeNames, String rootPrefix) {
+
+		String keyStr = null;
+		if (values.getKey().startsWith(result.getAttributeName())) {
+			keyStr = values.getKey();
+		} else {
+			keyStr = result.getAttributeName();
+		}
+
+		String ip = null;
+		if (query.getServer().getAlias() != null) {
+			ip = query.getServer().getAlias();
+		} else {
+			ip = query.getServer().getHost();
+			//alias = cleanupStr(alias);
+		}
+
+		// rootPrefix + . + alias + . + classNameAlias + . + typeName + . + cleanupStr(keyStr)
+		//
+		// put jmx.sun_management_MemoryImpl 1336419170 567 host=(ip) ..tags
+
+		StringBuilder sb = new StringBuilder();
+		if (rootPrefix != null) {
+			sb.append(rootPrefix);
+			sb.append(".");
+		}
+		// Allow people to use something other than the classname as the output.
+		if (result.getClassNameAlias() != null) {
+			sb.append(result.getClassNameAlias());
+		} else {
+			sb.append(result.getClassName());
+		}
+
+		sb.append(".");
+		sb.append(keyStr);
+
+		return sb.toString();
+	}
+
+	public static String getTagsTSD(Query query, Result result, Entry<String, Object> values, List<String> typeNames, String rootPrefix) {
+
+		String subType = null;
+                if (values.getKey().startsWith(result.getAttributeName())) {
+                        subType = null;
+                } else {
+                        subType = values.getKey();
+                }
+
+		StringBuilder sb = new StringBuilder();
+
+		String ip = null;
+                if (query.getServer().getAlias() != null) {
+                        ip = query.getServer().getAlias();
+                } else {
+                        ip = query.getServer().getHost();
+                        //alias = cleanupStr(alias);
+                }
+
+		sb.append("host=");
+		sb.append(ip);
+		sb.append(" ");
+		sb.append("type=");
+		sb.append(subType);
+
+		return sb.toString();
+	}
+
 	/**
 	 * Replaces all . with _ and removes all spaces and double/single quotes.
 	 * 
