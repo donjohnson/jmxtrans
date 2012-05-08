@@ -736,7 +736,7 @@ public class JmxUtils {
 		}
 
 		sb.append(".");
-		sb.append(keyStr);
+		sb.append(cleanupStrDontSquishMyDots(keyStr));
 
 		return sb.toString();
 	}
@@ -744,27 +744,24 @@ public class JmxUtils {
 	public static String getTagsTSD(Query query, Result result, Entry<String, Object> values, List<String> typeNames, String rootPrefix) {
 
 		String subType = null;
-                if (values.getKey().startsWith(result.getAttributeName())) {
-                        subType = null;
-                } else {
-                        subType = values.getKey();
-                }
+		if (values.getKey().startsWith(result.getAttributeName())) {
+			subType = null;
+		} else {
+			subType = values.getKey();
+		}
 
-		// getConcatedTypeNameValues
-		//     public static String getConcatedTypeNameValues(List<String> typeNames, String typeNameStr) {
 		String typeName = null;
-				typeName = cleanupStr(getConcatedTypeNameValues(query, typeNames, result.getTypeName()));
+		typeName = cleanupStr(getConcatedTypeNameValues(query, typeNames, result.getTypeName()));
 
 		StringBuilder sb = new StringBuilder();
 
 		String ip = null;
-                if (query.getServer().getAlias() != null) {
-                        ip = query.getServer().getAlias();
-                } else {
-                        ip = query.getServer().getHost();
-                        //alias = cleanupStr(alias);
-                }
-
+		if (query.getServer().getAlias() != null) {
+			ip = query.getServer().getAlias();
+		} else {
+			ip = query.getServer().getHost();
+		}
+		
 		sb.append("host=");
 		sb.append(ip);
 		if ((subType != null) && (subType.length() > 0)) {
@@ -774,12 +771,12 @@ public class JmxUtils {
 		}
 		if ((typeName != null) && (typeName.length() > 0)) {
 			sb.append(" ");
-		    sb.append("type=");
+			sb.append("type=");
 			sb.append(typeName);
 		}
 
 		return sb.toString();
-	}
+	}	
 
 	/**
 	 * Replaces all . with _ and removes all spaces and double/single quotes.
@@ -796,6 +793,17 @@ public class JmxUtils {
 		clean = clean.replace(" ", "");
 		clean = clean.replace("\"", "");
 		clean = clean.replace("'", "");
+		return clean;
+	}
+
+	public static String cleanupStrDontSquishMyDots(String name) {
+		if (name == null) {
+			return null;
+		}
+		String clean = name.replace(" ", "");
+		clean = clean.replace("\"", "");
+		clean = clean.replace("'", "");
+		//clean = name.replace(".", "_");
 		return clean;
 	}
 
