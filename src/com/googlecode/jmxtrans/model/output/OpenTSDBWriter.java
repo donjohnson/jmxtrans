@@ -121,8 +121,6 @@ public class OpenTSDBWriter extends BaseOutputWriter {
 							// put metric          timestamp  val  tags
 							// put proc.loadavg.1m 1288946927 0.36 host=foo
 
-							//         public static String getKeyString(Query query, Result result, Entry<String, Object> values, List<String> typeNames, String rootPrefix) {
-
 							sb.append("put ");
 							sb.append(JmxUtils.getKeyStringTSD(query, result, values, typeNames, rootPrefix));
 							sb.append(" ");

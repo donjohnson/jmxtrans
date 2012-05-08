@@ -750,6 +750,11 @@ public class JmxUtils {
                         subType = values.getKey();
                 }
 
+		// getConcatedTypeNameValues
+		//     public static String getConcatedTypeNameValues(List<String> typeNames, String typeNameStr) {
+		String typeName = null;
+				typeName = cleanupStr(getConcatedTypeNameValues(query, typeNames, result.getTypeName()));
+
 		StringBuilder sb = new StringBuilder();
 
 		String ip = null;
@@ -762,9 +767,16 @@ public class JmxUtils {
 
 		sb.append("host=");
 		sb.append(ip);
-		sb.append(" ");
-		sb.append("type=");
-		sb.append(subType);
+		if ((subType != null) && (subType.length() > 0)) {
+			sb.append(" ");
+			sb.append("metricSubType=");
+			sb.append(subType);
+		}
+		if ((typeName != null) && (typeName.length() > 0)) {
+			sb.append(" ");
+		    sb.append("type=");
+			sb.append(typeName);
+		}
 
 		return sb.toString();
 	}

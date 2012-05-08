@@ -2,7 +2,9 @@
 .project
 _eclipse
 .idea
+*.log
 logs
 out
 *.iml
 target
+queries
